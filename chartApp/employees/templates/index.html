@@ -197,15 +197,17 @@
       });
 
 
+      var months = {"january":"1/2023","february":"2/2023","march":"3/2023","april":"4/2023","may":"5/2023","june":"6/2023","july":"7/2023","august":"8/2023","september":"9/2023","october":"10/2023","november":"11/2023","december":"12/2023"}
       var atsvenempvphc_dataPoints = {{ atsvenempvphc_datapoints | safe}}
-      console.log("ats",atsvenempvphc_dataPoints)
+      data = atsvenempvphc_dataPoints.filter(x => x.monthyy == months["january"])
+      // console.log("ats",atsvenempvphc_dataPoints)
         employee_data = []
         contractor_data = []
         categories_data = []
-        for(var i=0; i< atsvenempvphc_dataPoints.length;i++){
-          categories_data.push({label: atsvenempvphc_dataPoints[i]["vicepresident"]})
-          employee_data.push({ value: atsvenempvphc_dataPoints[i]["employee"] })
-          contractor_data.push({ value: atsvenempvphc_dataPoints[i]["contractor"] })
+        for(var i=0; i< data.length;i++){
+          categories_data.push({label: data[i]["vicepresident"]})
+          employee_data.push({ value: data[i]["employee"] })
+          contractor_data.push({ value: data[i]["contractor"] })
         }
 
 
@@ -253,15 +255,22 @@
       });
 
 
-      $( ".dropdown" ).change(function() {
+      $( ".dropdownvenempvp" ).change(function() {
       
         var e = document.getElementById("dd");
 	      var selected = e.options[e.selectedIndex].value;
-        if(selected == "jan"){
-          employee_data = []
-          contractor_data = []
-          
+        data = atsvenempvphc_dataPoints.filter(x => x.monthyy == months[selected])
+        employee_data = []
+        contractor_data = []
+        categories_data = []
+        for(var i=0; i< data.length;i++){
+          categories_data.push({label: data[i]["vicepresident"]})
+          employee_data.push({ value: data[i]["employee"] })
+          contractor_data.push({ value: data[i]["contractor"] })
         }
+         
+          
+        
         atsvenempvphcdataSource = {
         chart: {
           caption: "VP wise Employee / Contractor",
@@ -301,17 +310,20 @@
           dataFormat: "json",
           dataSource: atsvenempvphcdataSource
         }).render();
+       
       });
 
 
       var atsvencondomhc_dataPoints = {{ atsvencondomhc_datapoints | safe}}
+      data = atsvencondomhc_dataPoints.filter(x => x.monthyy == months["january"])
+      console.log("atsvencon",atsvencondomhc_dataPoints)
         employee_data = []
         contractor_data = []
         categories_data = []
-        for(var i=0; i< atsvencondomhc_dataPoints.length;i++){
-          categories_data.push({label: atsvencondomhc_dataPoints[i]["department"]})
-          employee_data.push({ value: atsvencondomhc_dataPoints[i]["employee"] })
-          contractor_data.push({ value: atsvencondomhc_dataPoints[i]["contractor"] })
+        for(var i=0; i< data.length;i++){
+          categories_data.push({label: data[i]["department"]})
+          employee_data.push({ value: data[i]["employee"] })
+          contractor_data.push({ value: data[i]["contractor"] })
         }
 
 
@@ -359,42 +371,76 @@
       });
 
 
+
+      $( ".dropdownvenempdom" ).change(function() {
+      
+        var e = document.getElementById("dc");
+        var selected = e.options[e.selectedIndex].value;
+        data = atsvencondomhc_dataPoints.filter(x => x.monthyy == months[selected])
+        employee_data = []
+        contractor_data = []
+        categories_data = []
+        for(var i=0; i< data.length;i++){
+          categories_data.push({label: data[i]["department"]})
+          employee_data.push({ value: data[i]["employee"] })
+          contractor_data.push({ value: data[i]["contractor"] })
+        }
+
+
+        const atsvencondomhcdataSource = {
+        chart: {
+          caption: "Domain wise Employee / Contractor",
+          subcaption: "",
+          numvisibleplot: "6",
+          showvalues: "1",
+          decimals: "1",
+          xAxisName: "Domain",
+          yAxisName: "Percentage",
+          stack100percent: "1",
+          valuefontcolor: "#FFFFFF",
+          plottooltext:
+            "$label  $dataValue (<b>$percentValue</b>) $seriesName ",
+          theme: "fusion"
+        },
+        categories: [
+          {
+            category: categories_data
+          }
+        ],
+        dataset: [
+          {
+            seriesname: "Employee",
+            data: employee_data
+          },
+          {
+            seriesname: "Contractor",
+            data: contractor_data
+          }
+        ]
+      };
+
+      FusionCharts.ready(function() {
+        var myChart = new FusionCharts({
+          type: "scrollstackedcolumn2d",
+          renderAt: "atsvencondomhcContainer",
+          width: "100%",
+          height: "100%",
+          dataFormat: "json",
+          dataSource: atsvencondomhcdataSource
+        }).render();
+      });
+
+
+
+
+    });
+
+
      
         
 
    
-  // $( ".dropdown" ).change(function() {
-	//   //atsvencondomhcchart.options.data[0].dataPoints = [];
-  //   var e = document.getElementById("dd");
-	//   var selected = e.options[e.selectedIndex].value;
-  //   if(selected == "data1"){
-     
-  //     dpsEmployee = jsonData["employee_data1"]
-  //     dpsContractor = jsonData["contractor_data1"]
-  //   }
-  //   else if(selected == "data2"){
-      
-  //     dpsEmployee = jsonData["employee_data2"]
-  //     dpsContractor = jsonData["contractor_data2"] 
-  //   }
-  //   else{  
-  //     dpsEmployee = jsonData["employee_data3"]
-  //     dpsContractor = jsonData["contractor_data3"] 
-    
-  //   }
-  //   atsvencondomhcchart.options.data[0].dataPoints = []
-  //   atsvencondomhcchart.options.data[1].dataPoints = []
-  //   for(var i in dpsEmployee) {
-  //     atsvencondomhcchart.options.data[0].dataPoints.push({label: dpsEmployee[i].label, y: dpsEmployee[i].y});
-  //   }
-  //   for(var i in dpsContractor) {
-  //     atsvencondomhcchart.options.data[1].dataPoints.push({label: dpsContractor[i].label, y: dpsContractor[i].y});
-  //   }
-    
-  //   atsvencondomhcchart.render();
-  // })
-
-  // atsvencondomhcchart.render();
+  
 
 
 
@@ -423,14 +469,41 @@
       <div id="idcvphrsContainer" style="width: 100%; height: 100%;  margin-bottom: 150px;"></div>
       <div id="idcdomhcContainer" style="width: 100%; height: 100%;  margin-bottom: 150px;"></div>  
       <div id="idcdomhrsContainer" style="width: 100%; height: 100%;  margin-bottom: 150px;"></div>
-      <div style="margin-bottom: 10px;"> 
-        <select class="dropdown" id="dd">
-          <option value="jan" selected="selected">January</option>
-          <option value="feb">February</option>
+      <div style="margin-bottom: 20px;"> 
+        <select class="dropdownvenempvp" id="dd" placeholder="MM">
+          <option value=""style="display:none;" selected="selected">MM</option>
+          <option value="january">January</option>
+          <option value="february">February</option>
           <option value="march">March</option>
+          <option value="april">April</option>
+          <option value="may">May</option>
+          <option value="june">June</option>
+          <option value="july">July</option>
+          <option value="august">August</option>
+          <option value="september">September</option>
+          <option value="october">October</option>
+          <option value="november">November</option>
+          <option value="december">December</option>
         </select>
       </div>
       <div id="atsvenconvphcContainer" style="width: 100%; height: 100%;  margin-bottom: 150px;"></div> 
+      <div style="margin-bottom: 20px;"> 
+        <select class="dropdownvenempdom" id="dc" placeholder="MM">
+          <option value=""style="display:none;" selected="selected">MM</option>
+          <option value="january">January</option>
+          <option value="february">February</option>
+          <option value="march">March</option>
+          <option value="april">April</option>
+          <option value="may">May</option>
+          <option value="june">June</option>
+          <option value="july">July</option>
+          <option value="august">August</option>
+          <option value="september">September</option>
+          <option value="october">October</option>
+          <option value="november">November</option>
+          <option value="december">December</option>
+        </select>
+      </div>
       <div id="atsvencondomhcContainer" style="width: 100%; height: 100%;  margin-bottom: 150px;"></div>  
       
       
