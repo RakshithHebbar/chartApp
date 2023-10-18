@@ -1,0 +1,15 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'app.css' %}">
+<div class="custom-file mb-4">
+    <form id="csvform" action="{% url "excelUpload" %}" method="POST" enctype="multipart/form-data"  method="post" enctype="multipart/form-data">{% csrf_token %}
+        <label for="images" class="drop-container">
+            <span class="drop-title">Upload a CSV file</span>
+            <input type="file" class="custom-file-input" id="customFile" name="customFile" required accept=".csv" size="60">
+        </label>
+    <div>
+        <div align="center">
+            <input type="submit" class="button" value="Submit">
+        </div>
+    </div>
+    </form>
+</div>
